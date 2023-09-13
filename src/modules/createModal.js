@@ -1,8 +1,8 @@
 import { fetchCategories } from "./category.js";
 import { getTotal, allTotalTableSum } from "./summs.js";
 import { toBase } from "./picture.js";
-import { numbers } from "./table.js";
-import { API_URL, GOODS_URL } from "./const.js";
+import { API_URL, GOODS_URL, appData } from "./const.js";
+import { renderGoods } from "./render.js";
 
 export const openEditModal = async ({
   id,
@@ -211,7 +211,7 @@ export const openEditModal = async ({
     fileLabel,
     fileInput,
     document.createElement("br"),
-    spacerContainer
+    spacerContainer,
   );
 
   const footer = document.createElement("div");
@@ -225,7 +225,7 @@ export const openEditModal = async ({
   totalPriceOutput.classList.add("modal__total-price");
   totalPriceOutput.name = "total";
   totalPriceOutput.textContent = `$${getTotal(price, count, discount).toFixed(
-    2
+    2,
   )}`;
   totalPriceLabel.append(totalPriceOutput);
 
@@ -268,15 +268,6 @@ export const openEditModal = async ({
     const product = Object.fromEntries(formData);
 
     const updatedData = {
-      /*
-        id,
-        title: nameInput.value,
-        price: parseFloat(priceInput.value), 
-        category: categoryInput.value,
-        count: parseInt(countInput.value), 
-        units: unitsInput.value,
-        discount: discountInput.checked ? parseFloat(formData.get('discount_count')) : null, 
-        description: formData.get('description'),*/
       id,
       title: product.title,
       category: product.category,
@@ -288,7 +279,9 @@ export const openEditModal = async ({
       image: fileInput.files[0] ? await toBase(fileInput.files[0]) : null,
     };
 
-    saveChanges(id, updatedData);
+    await saveChanges(id, updatedData);
+    renderGoods(`${appData.lastUrl}`);
+
     closeModal();
 
     await allTotalTableSum();
@@ -328,7 +321,6 @@ export const saveChanges = async (id, updatedData) => {
         console.log("Changes saved successfully");
 
         updateRow(id, updatedData);
-        numbers();
       } else {
         console.error("Error saving changes:", response.statusText);
       }
@@ -359,7 +351,7 @@ export const updateRow = (id, updatedData) => {
     const total = getTotal(
       updatedData.count,
       updatedData.price,
-      updatedData.discount
+      updatedData.discount,
     ).toFixed(2);
     if (cellTotal) cellTotal.textContent = total;
   } else {

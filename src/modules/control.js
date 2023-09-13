@@ -1,4 +1,4 @@
-import create, { API_URL, GOODS_URL } from "./const.js";
+import create, { API_URL, GOODS_URL, appData } from "./const.js";
 const { btn, table, modal, form, price, count, discont, formelems, checkbox } =
   create;
 import { closeModal, openModal } from "./modal.js";
@@ -6,6 +6,7 @@ import { getTotal, allTotalTableSum } from "./summs.js";
 import { addProductData, numbers, addProductPage } from "./table.js";
 import { toBase } from "./picture.js";
 import { loadGoods } from "./service.js";
+import { renderGoods } from "./render.js";
 
 export const formModal = () => {
   form.addEventListener("submit", async (e) => {
@@ -19,9 +20,9 @@ export const formModal = () => {
     newProduct.discont = document.querySelector(".modal__input_discount").value;
 
     addProductData(newProduct);
-    numbers();
     await allTotalTableSum();
 
+    renderGoods(`${appData.lastUrl}`);
     form.reset();
     closeModal();
   });
@@ -45,14 +46,7 @@ const openConfirmationModal = async (id, target) => {
         method: "DELETE",
       });
 
-      const data = await loadGoods();
-      const connectIndex = data.findIndex((item) => item.id == id);
-      data.splice(connectIndex, 1);
-
-      target.closest(".row").remove();
-      console.log(data);
-      numbers(data);
-      await allTotalTableSum();
+      renderGoods(`${appData.lastUrl}`);
     } catch (error) {
       console.error("Failed to delete the product:", error);
     }
@@ -102,7 +96,7 @@ export const openWindow = () => {
         window.open(
           pictureUrl,
           "_blank",
-          `width=800,height=600,left=${w},top=${h}`
+          `width=800,height=600,left=${w},top=${h}`,
         );
       } catch (error) {
         console.error(error);
@@ -135,7 +129,7 @@ export const totalModal = () => {
       modalTotal.value = getTotal(
         price.value,
         count.value,
-        discont.value
+        discont.value,
       ).toFixed(2);
     });
   });

@@ -1,6 +1,7 @@
 import create, { GOODS_URL } from "./const.js";
 const { table } = create;
 import { openEditModal } from "./createModal.js";
+import { counter } from "./pagination.js";
 
 import { pic } from "./pic.js";
 
@@ -21,7 +22,6 @@ const addProductData = async (product) => {
       const newRow = createRow(newProduct);
       table.append(newRow);
 
-      numbers();
       await allTotalTableSum();
     } else if (
       response.status === 422 ||
@@ -55,7 +55,6 @@ const addProductPage = async (product, table) => {
       const newRow = createRow(newProduct);
       table.append(newRow);
 
-      numbers();
       await allTotalTableSum();
     } else {
       console.log("Error adding product");
@@ -65,10 +64,10 @@ const addProductPage = async (product, table) => {
   }
 };
 
-const numbers = () => {
+const numbers = (page) => {
   const numTd = table.querySelectorAll(".table__cell-num");
 
-  let n = 1;
+  let n = (page - 1) * counter + 1;
   numTd.forEach((i) => {
     i.textContent = n++;
   });
@@ -160,7 +159,7 @@ const createRow = ({
     tdCount,
     tdPrice,
     tdTotal,
-    tdImages
+    tdImages,
   );
   return tr;
 };

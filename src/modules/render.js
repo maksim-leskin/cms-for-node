@@ -1,14 +1,16 @@
-import create, { GOODS_URL } from "./const.js";
+import create, { appData } from "./const.js";
 const { table } = create;
 
 import { numbers, createRow } from "./table.js";
 import { allTotalTableSum } from "./summs.js";
 import { loadGoods } from "./service.js";
+import { renderPagination } from "./pagination.js";
 
-export const renderGoods = async () => {
-  const data = await loadGoods();
-  console.log("data: ", data);
-
+export const renderGoods = async (url) => {
+  const dataUrl = new URL(url);
+  const data = await loadGoods({ url: dataUrl });
+  appData.lastUrl = dataUrl;
+  table.textContent = "";
   data.goods.forEach((product) => {
     const {
       id,
@@ -21,6 +23,7 @@ export const renderGoods = async () => {
       description,
       image,
     } = product;
+
     const row = createRow({
       id,
       title,
@@ -35,6 +38,11 @@ export const renderGoods = async () => {
     table.append(row);
   });
 
-  numbers();
+  numbers(data.page);
+
+  renderPagination({
+    ...data,
+    dataUrl,
+  });
   await allTotalTableSum();
 };

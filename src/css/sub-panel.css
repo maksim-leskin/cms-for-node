@@ -31,22 +31,13 @@
 }
 
 .sub-panel__left {
-  border: solid #6e6893;
-  border-width: 0 2px 2px 0;
-  padding: 4px;
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-  height: 5px;
-  width: 5px;
+  border: 0;
+  background-color: transparent;
 }
 
 .sub-panel__right {
-  border: solid #6e6893;
-  border-width: 0 2px 2px 0;
-  padding: 4px;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  height: 5px;
-  width: 5px;
+  border: 0;
+  background-color: transparent;
+  align-self: center;
   justify-self: end;
 }

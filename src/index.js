@@ -1,6 +1,6 @@
 import { renderGoods } from "./modules/render.js";
 
-import create from "./modules/const.js";
+import create, { GOODS_URL } from "./modules/const.js";
 const { overlay } = create;
 
 import {
@@ -35,7 +35,7 @@ const init = () => {
   fetchCategories();
   openWindow();
 
-  renderGoods();
+  renderGoods(GOODS_URL);
 };
 
 init();
