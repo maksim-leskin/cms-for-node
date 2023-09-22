@@ -85,7 +85,7 @@ export const openEditModal = async ({
   const categoryInput = document.createElement("input");
   categoryInput.classList.add("modal__input");
   categoryInput.type = "text";
-  categoryInput.name = "categoryId";
+  categoryInput.name = "category";
   categoryInput.id = "categoryId";
   categoryInput.setAttribute("list", "category-list-id");
   categoryInput.value = category;
@@ -275,7 +275,7 @@ export const openEditModal = async ({
       units: product.units,
       count: Number(product.count),
       price: Number(product.price),
-      discount: product.discontValue ? Number(product.discontValue) : false,
+      discount: product.discount_count ? Number(product.discount_count) : false,
       image: fileInput.files[0] ? await toBase(fileInput.files[0]) : null,
     };
 
